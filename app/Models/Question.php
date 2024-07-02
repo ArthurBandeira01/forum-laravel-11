@@ -20,6 +20,8 @@ class Question extends Model
         'text',
     ];
 
+    protected $with = ['category'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
