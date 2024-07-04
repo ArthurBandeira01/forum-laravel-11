@@ -15,7 +15,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::all();
+        $questions = Question::where('user_id', Auth::id())->paginate(15);
 
         return view('question.index', compact('questions'));
     }
@@ -54,15 +54,19 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        //
+        $categories = Category::all();
+
+        return view('question.edit', compact('categories', 'question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Question $question)
+    public function update(StoreUpdateQuestionRequest $request, Question $question)
     {
-        //
+        $question->update($request->validated());
+
+        return redirect()->route('questions.index')->with('success', 'Pergunta atualizada com sucesso!');
     }
 
     /**

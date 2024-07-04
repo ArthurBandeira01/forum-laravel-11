@@ -1,46 +1,42 @@
-<h1>Listagem de Perguntas</h1>
-<a href="{{ route('questions.create') }}">Cadastrar Perguntas</a>
-<br><br>
-
-@if (session('success'))
-    <p>{{ session('success') }}</p>
-@endif
-
-<table>
-    <thead>
-        <tr>
-            <th>Assunto</th>
-            <th>Conteúdo</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse ($questions as $question)
-            <tr>
-                <td>{{ $question->subject }}</td>
-                <td>{{ $question->text }}</td>
-                <td>
-                    <a href="{{ route('questions.show', $question->id) }}">
-                        Visualizar
-                    </a>
-                    <button
-                        onclick="event.preventDefault();
-                                if(confirm('Você realmente excluir este item?')) document.getElementById('form-delete').submit()
-                    ">
-                        Deletar
-                    </button>
-                    <form action="{{ route('questions.destroy', $question->id) }}" id="form-delete" method="POST">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="2">
-                    Não existem perguntas cadastradas.
-                </td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Perguntas') }}
+            </h2>
+            <x-link-button link="questions.create"> Criar Pergunta</x-link-button>
+        </div>
+    </x-slot>
+    <x-main-layout>
+        <x-flash />
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Assunto</th>
+                    <th scope="col" class="px-6 py-3">Conteúdo</th>
+                    <th scope="col" class="px-6 py-3">Categoria</th>
+                    <th scope="col" class="px-6 py-3">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 dark:text-white text-sm font-light">
+                @forelse ($questions as $question)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-70">
+                        <td class="px-6 py-4">{{ $question->subject }}</td>
+                        <td class="px-6 py-4">{{ $question->short_text }}</td>
+                        <td class="px-6 py-4">{{ $question->category->name }}</td>
+                        <td class="px-6 py-4 flex justify-center space-x-2">
+                            <a href="{{ route('questions.show', $question->id) }}">
+                                <i class="fa-solid fa-building"></i>
+                            </a>
+                            <a href="{{ route('questions.edit', $question->id) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                @endforelse
+            </tbody>
+        </table>
+        <x-pagination :paginator="$questions" />
+    </x-main-layout>
+</x-app-layout>

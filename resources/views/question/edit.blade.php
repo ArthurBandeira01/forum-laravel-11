@@ -10,11 +10,10 @@
 
     <x-main-layout>
         <x-error-message />
-
-        <form action="{{ route('questions.store') }}" method="post">
+        <form action="{{ route('questions.update', $question->id) }}" method="post">
             @csrf
+            @method('PUT')
             @include('question.partials.form')
         </form>
-
     </x-main-layout>
 </x-app-layout>
