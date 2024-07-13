@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('questions.index')" :active="request()->routeIs('questions.*')">
                         {{ __('Perguntas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('forum.index')">
+                        {{ __('Fórum') }}
+                    </x-nav-link>
                 </div>
             </div>
 
